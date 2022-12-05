@@ -7,6 +7,7 @@
 class Tank : public DestroyableGroundObject
 {
 public:
+	virtual void foo() = 0;
 
 	bool __fastcall isInside(double x1, double x2) const override;
 

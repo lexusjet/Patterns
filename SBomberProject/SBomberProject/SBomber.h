@@ -6,7 +6,7 @@
 #include "Plane.h"
 #include "Bomb.h"
 #include "Ground.h"
-#include "Tank.h"
+#include  "Tank.h"
 
 class SBomber
 {

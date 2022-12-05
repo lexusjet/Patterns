@@ -6,8 +6,12 @@
 #include "SBomber.h"
 #include "Bomb.h"
 #include "Ground.h"
-#include "Tank.h"
+#include  "TankAdaptee.h"
 #include "House.h"
+
+#include "BombIterator.h"
+
+#include "TankAdapter.h"
 
 using namespace std;
 using namespace MyTools;
@@ -47,13 +51,15 @@ SBomber::SBomber()
     pGr->SetPos(offset + 1, groundY);
     pGr->SetWidth(width - 2);
     vecStaticObj.push_back(pGr);
-
-    Tank* pTank = new Tank;
+    
+    TankAdapter* pTank = new TankAdapter;
+    //Tank* pTank = new Tank;
     pTank->SetWidth(13);
     pTank->SetPos(30, groundY - 1);
     vecStaticObj.push_back(pTank);
 
-    pTank = new Tank;
+    pTank = new TankAdapter;
+    //pTank = new Tank;
     pTank->SetWidth(13);
     pTank->SetPos(50, groundY - 1);
     vecStaticObj.push_back(pTank);
@@ -184,11 +190,11 @@ void SBomber::DeleteStaticObj(GameObject* pObj)
 vector<DestroyableGroundObject*> SBomber::FindDestoyableGroundObjects() const
 {
     vector<DestroyableGroundObject*> vec;
-    Tank* pTank;
+    TankAdapter* pTank;
     House* pHouse;
     for (size_t i = 0; i < vecStaticObj.size(); i++)
     {
-        pTank = dynamic_cast<Tank*>(vecStaticObj[i]);
+        pTank = dynamic_cast<TankAdapter*>(vecStaticObj[i]);
         if (pTank != nullptr)
         {
             vec.push_back(pTank);
@@ -225,14 +231,13 @@ Ground* SBomber::FindGround() const
 vector<Bomb*> SBomber::FindAllBombs() const
 {
     vector<Bomb*> vecBombs;
+    
+    BombIterator bombItr( vecDynamicObj);
 
-    for (size_t i = 0; i < vecDynamicObj.size(); i++)
-    {
-        Bomb* pBomb = dynamic_cast<Bomb*>(vecDynamicObj[i]);
-        if (pBomb != nullptr)
-        {
-            vecBombs.push_back(pBomb);
-        }
+    while (bombItr != bombItr.end()) {
+        Bomb* pBomb = dynamic_cast<Bomb*>(*bombItr);
+        vecBombs.push_back(pBomb);
+        ++bombItr;
     }
 
     return vecBombs;
